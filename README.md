@@ -1,4 +1,4 @@
-# ❄️🐱 snow-cat
+# snow-cat
 
 An animated snow-cat companion that listens via VAD, thinks via an LLM routed through OpenRouter, talks back via in-browser Kokoro ONNX voice synthesis, and reacts visually through animated states (idle, listening, thinking, speaking, happy).
 
