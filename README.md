@@ -1,159 +1,99 @@
-# Turborepo starter
+# ❄️🐱 snow-cat
 
-This Turborepo starter is maintained by the Turborepo core team.
+An animated snow-cat companion that listens via VAD, thinks via an LLM routed through OpenRouter, talks back via in-browser Kokoro ONNX voice synthesis, and reacts visually through animated states (idle, listening, thinking, speaking, happy).
 
-## Using this example
+Built on **Turborepo + bun workspaces + Next.js 16**.
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
-```
+## Prerequisites
 
-## What's inside?
+- **bun** >= 1.3.14 ([install](https://bun.sh/docs/installation))
+- An **OpenRouter API key** ([get one](https://openrouter.ai/keys))
 
-This Turborepo includes the following packages/apps:
+---
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+## Getting Started
 
 ```sh
-cd my-turborepo
-turbo build
-```
+# Install dependencies
+bun install
 
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo build
-bun dlx turbo build
-bun exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-bun exec turbo build --filter=docs
-bun exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
+# Start dev (all apps + packages in watch mode)
 turbo dev
-```
 
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-bun exec turbo dev
-bun exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
+# Or just the web app
 turbo dev --filter=web
 ```
 
-Without global `turbo`:
+---
 
-```sh
-npx turbo dev --filter=web
-bun exec turbo dev --filter=web
-bun exec turbo dev --filter=web
+## Monorepo Layout
+
+```
+snow-cat/
+├── apps/
+│   ├── web/              # Next.js 16 app — the only deployable app
+│   └── docs/             # Starter scaffold (can be removed)
+├── packages/
+│   ├── types/            # @snow-cat/types — shared TS types (chat, cat state, TTS contract)
+│   ├── store/            # @snow-cat/store — Zustand cat state store
+│   ├── vad/              # @snow-cat/vad — VAD manager + useVAD hook
+│   ├── tts/              # @snow-cat/tts — Kokoro ONNX + WebSpeech TTS engines
+│   ├── ai/               # @snow-cat/ai — OpenRouter client + persona prompt (server-only)
+│   ├── ui/               # @snow-cat/ui — SnowCat, ParticleField, Visualizer, etc.
+│   ├── eslint-config/    # @repo/eslint-config — shared ESLint configs
+│   └── typescript-config/# @repo/typescript-config — shared tsconfigs
+├── turbo.json
+└── package.json
 ```
 
-### Remote Caching
+---
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+## Environment
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+Create `apps/web/.env.local`:
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
+```env
+OPENROUTER_API_KEY=sk-or-v1-your-key-here
 ```
 
-Without global `turbo`, use your package manager:
+This is the only env var — it stays server-side (no `NEXT_PUBLIC_` prefix) and is never exposed to the browser.
 
-```sh
-cd my-turborepo
-npx turbo login
-bun exec turbo login
-bun exec turbo login
-```
+---
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Available Scripts
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+| Command | Description |
+|---|---|
+| `turbo dev` | Run all packages in dev mode |
+| `turbo build` | Build all packages |
+| `turbo lint` | Lint all packages |
+| `turbo check-types` | Type-check all packages |
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+---
 
-```sh
-turbo link
-```
+## Package Reference
 
-Without global `turbo`:
+| Package | Scope | Description |
+|---|---|---|
+| `@snow-cat/types` | shared | Chat types, cat state union, TTS engine interface, persona config |
+| `@snow-cat/store` | client | Zustand store for cat state, transcript, reply, VAD intensity |
+| `@snow-cat/vad` | client-only | Silero VAD wrapper (`@ricky0123/vad-web`), `useVAD` hook, PCM→WAV utility |
+| `@snow-cat/tts` | client-only | `WebSpeechTTS` (fallback), `KokoroTTS` (ONNX), `VoiceCloner`, pitch-shifting |
+| `@snow-cat/ai` | server-only | OpenRouter `chat/completions` client, system prompt, model fallback logic |
+| `@snow-cat/ui` | client | Animated cat, particle field, audio visualizer, chat bubble, control panel |
+| `@repo/eslint-config` | shared | ESLint flat configs (base, next-js, react-internal) |
+| `@repo/typescript-config` | shared | tsconfig presets (base, nextjs, react-library) |
 
-```sh
-npx turbo link
-bun exec turbo link
-bun exec turbo link
-```
+---
 
-## Useful Links
+## Architecture Notes
 
-Learn more about the power of Turborepo:
+- **Server-only**: `@snow-cat/ai` — keeps `OPENROUTER_API_KEY` out of the browser bundle. Only imported by `apps/web/app/api/chat/route.ts`.
+- **Client-only**: `@snow-cat/vad`, `@snow-cat/tts`, `@snow-cat/ui` — keep ONNX runtime and mic access out of the server bundle.
+- **COOP/COEP headers**: required in `next.config.js` for Kokoro's ONNX `SharedArrayBuffer` usage. Compatible with Vercel; not compatible with GitHub Pages.
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+---
+
+Originally scaffolded from `create-turbo` (bun + Next.js).
